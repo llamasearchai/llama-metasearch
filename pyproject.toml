@@ -1,0 +1,104 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "llama-metasearch"
+version = "0.1.0"
+description = "Metasearch engine aggregating and ranking results from multiple LlamaAI sources."
+readme = "README.md"
+requires-python = ">=3.8"
+license = {file = "LICENSE"}
+authors = [
+    {name = "Your Name", email = "your.email@example.com"}, # Replace
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Internet :: WWW/HTTP :: Indexing/Search",
+]
+dependencies = [
+    # Core utilities
+    "pydantic>=1.10.0",
+    "loguru>=0.7.0",
+    "asyncio>=3.4", # Explicitly if needed, usually covered by Python version
+    "httpx>=0.24.0", # For calling other search service APIs async
+
+    # Ranking/Merging Logic
+    "numpy>=1.21.0", # Potentially for score manipulation
+    "scikit-learn>=1.1.0", # Potentially for learning-to-rank models
+
+    # Internal Dependencies (Sources it aggregates from)
+    "llamafind>=0.1.0", # Likely primary source
+    # Add others as needed, e.g., specialized search components
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.3.1",
+    "pytest-cov>=4.1.0",
+    "pytest-asyncio", # For testing async functions
+    "black>=23.3.0",
+    "isort>=5.12.0",
+    "mypy>=1.2.0",
+    "ruff>=0.0.260",
+    "pre-commit>=3.3.1",
+    "pytest-mock>=3.10.0",
+    "httpx", # For mocking API calls
+]
+docs = [
+    "mkdocs>=1.4.2",
+    "mkdocs-material>=9.1.6",
+    "mkdocstrings[python]>=0.20.0",
+]
+api = [
+    "fastapi>=0.95.0",
+    "uvicorn[standard]>=0.21.0",
+]
+all = [
+    "llama-metasearch[dev,docs,api]"
+]
+
+[project.urls]
+"Homepage" = "https://github.com/yourusername/llama-metasearch"
+"Bug Tracker" = "https://github.com/yourusername/llama-metasearch/issues"
+"Documentation" = "https://yourusername.github.io/llama-metasearch/"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/llama_metasearch"]
+
+[tool.black]
+line-length = 88
+target-version = ["py38"]
+
+[tool.isort]
+profile = "black"
+line_length = 88
+
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+ignore_missing_imports = true # Tighten later
+
+[tool.ruff]
+line-length = 88
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "I", "C", "B"]
+ignore = []
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
+asyncio_mode = "auto" 

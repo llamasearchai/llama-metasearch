@@ -4,12 +4,12 @@ on:
   push:
     branches: [ main, develop ]
     paths:
-      - 'llama-metasearch-pkg/**'
+      - '**' # Trigger on any change within this package directory
       - '.github/workflows/llama_metasearch_ci.yml'
   pull_request:
     branches: [ main, develop ]
     paths:
-      - 'llama-metasearch-pkg/**'
+      - '**' # Trigger on any change within this package directory
       - '.github/workflows/llama_metasearch_ci.yml'
   workflow_dispatch:
 
@@ -71,5 +71,4 @@ jobs:
         token: ${{ secrets.CODECOV_TOKEN }}
         slug: ${{ github.repository }}
         fail_ci_if_error: false
-        working-directory: ./llama-metasearch-pkg
         verbose: true 

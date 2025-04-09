@@ -1,28 +1,51 @@
-"""Basic tests for the llama-metasearch package."""
-
+"""Tests for core functionality"""
 import pytest
-
-# Try importing the package
-try:
-    import llama_metasearch
-except ImportError as e:
-    pytest.fail(f"Failed to import llama_metasearch: {e}", pytrace=False)
+from llama_metasearch.core import Client
 
 
-def test_import():
-    """Test that the main package can be imported."""
-    assert llama_metasearch is not None
+def test_client_initialization():
+    """Test that client initializes properly"""
+    client = Client()
+    assert client is not None
+    assert client.config == {}
+    
+    # Test with config
+    config = {"timeout": 60}
+    client = Client(config=config)
+    assert client.config == config
 
 
-def test_version():
-    """Test that the package has a version attribute."""
-    assert hasattr(llama_metasearch, "__version__")
-    assert isinstance(llama_metasearch.__version__, str)
+def test_client_process():
+    """Test processing functionality"""
+    client = Client()
+    result = client.process("test data")
+    assert isinstance(result, dict)
+    assert "result" in result
+    assert "input" in result
+    assert result["input"] == "test data"
 
 
-# Add more tests later:
-# - Test MetaSearcher initialization
-# - Test asynchronous querying of mocked sources (using pytest-asyncio and httpx mocks)
-# - Test result merging and deduplication logic
-# - Test ranking logic (with simple or mocked rankers)
-# - Test integration with actual (mocked) dependent services like llamafind
+def test_client_status():
+    """Test status functionality"""
+    client = Client()
+    status = client.get_status()
+    assert isinstance(status, dict)
+    assert "status" in status
+
+
+def test_search():
+    """Test search functionality"""
+    client = Client()
+    results = client.search("test query")
+    assert "query" in results
+    assert "results" in results
+    assert "meta" in results
+    assert results["query"] == "test query"
+    assert len(results["results"]) > 0
+    
+    
+def test_async_search():
+    """Test async search functionality"""
+    client = Client()
+    job_id = client.async_search("test query")
+    assert isinstance(job_id, str)
